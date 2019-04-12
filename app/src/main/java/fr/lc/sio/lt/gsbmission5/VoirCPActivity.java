@@ -2,6 +2,8 @@ package fr.lc.sio.lt.gsbmission5;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView;
 import android.support.v7.app.AppCompatActivity;
 import android.graphics.Color;
 import android.content.Context;
@@ -48,23 +50,30 @@ import  fr.lc.sio.lt.gsbmission5.Metier.InputStreamOperations;
 public class VoirCPActivity extends AppCompatActivity {
 
     ListView lesPracticiens;
+    TextView lePractSelect;
    String ListCp[] ;
+    int numRapport;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_voir_cp);
-        lesPracticiens = (ListView) findViewById(R.id.id_lstPracticiens);
+        lesPracticiens = (ListView) findViewById(R.id.id_lstCP);
+        lePractSelect=(TextView) findViewById(R.id.id_afficherCpSelect);
         this.AfficherListCp();
-        Log.i("VOIRLISTE",L)
+
       /*  ArrayAdapter<String> adapter = new ArrayAdapter<String>(
              this,
                android.R.layout.simple_list_item_1,
                 ListCp
         );*/
 
-      // lesPracticiens.setAdapter(adapter);
+       //lesPracticiens.setAdapter(adapter);
     }
     public void voirLeCP(View vue){
+        SharedPreferences prefs = this.getSharedPreferences("default",0);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putInt("numRapport",numRapport);
+        edit.commit();
         Intent connexion = new Intent(this, LeCPActivity.class);
         startActivity(connexion);
     }
@@ -87,7 +96,7 @@ public class VoirCPActivity extends AppCompatActivity {
             @Override
             public void onResponse(JSONArray response) {
 
-                ListCp = new String[response.length()];
+               String  List[] = new String[response.length()];
                 try {
                     for( int i = 0 ; i < response.length() ; i++) {
 
@@ -95,10 +104,11 @@ public class VoirCPActivity extends AppCompatActivity {
                         Log.i("Test 2",practicien.getJSONObject("praticien").getString("praTypeCode"));
                         String resp = practicien.getJSONObject("praticien").getString("praNom")+"-"+practicien.getJSONObject("praticien").getString("praPrenom")+
                                 "-"+practicien.getString("consulte")+"-"+practicien.getString("dateRapport");
-                        ListCp[i]= resp;
+                        List[i]= resp;
                     }
-                    Log.i("TEST-LIST",ListCp[1]);
 
+
+                    RecupeLaListCp(List);
 
                 } catch (Exception e) {
 
@@ -129,51 +139,30 @@ public class VoirCPActivity extends AppCompatActivity {
 
 
     }
-    public void RecupererListeCP(View vue){
+    public void RecupeLaListCp(String[] list){
+        ListCp = new String[list.length];
+        ListCp = list;
+        Log.i("TEST-LIST",ListCp[1]);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_list_item_1,
+                ListCp
+        );
 
+        lesPracticiens.setAdapter(adapter);
+        lesPracticiens.setOnItemClickListener(
+                new OnItemClickListener(){
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View vue, int position, long id){
+                        String practicienSelect = ListCp[position];
+                        numRapport = position;
+                        lePractSelect.setText(practicienSelect+" "+String.valueOf(numRapport));
 
-
-        SharedPreferences ps = this.getSharedPreferences("default",0);
-
-        String ip = ps.getString("ip","");
-        String url =""+ip+"/recupListeRapport/"+ps.getString("id","");
-        Log.d("IP", url);
-        Response.Listener<JSONArray> responseListener = new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-
-
-                try {
-                        for( int i = 0 ; i < response.length() ; i++) {
-
-                         }
-
-                } catch (Exception e) {
-
-                    Toast.makeText(VoirCPActivity.this, "Echec de connexion ",
-                            Toast.LENGTH_LONG).show();
-                    Log.e("APP-RV", "Erreur : " + e.getMessage());
+                    }
                 }
-            }
-        };
-
-        Response.ErrorListener responseErrorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("APP_RV", "Erreur JSON : " + error.getMessage());
-                Log.d("vist", "error"+error.getMessage());
-            }
-        };
-
-        JsonArrayRequest jsonArraysRequest = new JsonArrayRequest(Request.Method.GET, url, null,
-                responseListener, responseErrorListener);
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(jsonArraysRequest);
-
-
-
-
+        );
     }
+
 
 
   /* public List<Rapport> getLesRapport(Practicien numPra, String id, Date dateVisite, Date dateRapportEnv,String commentaire){

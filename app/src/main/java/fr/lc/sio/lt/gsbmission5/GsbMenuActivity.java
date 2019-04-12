@@ -61,7 +61,6 @@ public class GsbMenuActivity extends AppCompatActivity {
     }
     public void voirCP(View vue){
 
-
         Intent voir = new Intent(this, VoirCPActivity.class);
        startActivity(voir);
 

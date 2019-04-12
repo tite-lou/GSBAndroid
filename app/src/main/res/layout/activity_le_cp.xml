@@ -6,6 +6,21 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".LeCPActivity">
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:text="TextView" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -15,22 +30,23 @@
             android:id="@+id/btn_valider"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5"
             android:layout_marginLeft="20dp"
+            android:layout_weight="0.5"
 
-            android:text="Retour"
-            android:onClick="retourChoix"/>
+            android:onClick="retourChoix"
+            android:text="Retour" />
+
+
 
         <Button
             android:id="@+id/btn_annuler"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
+            android:layout_weight="0.5"
             android:onClick="retourMenu"
-            android:text="Menu"
-            />
+            android:text="Menu" />
 
 
     </LinearLayout>

@@ -15,6 +15,11 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
         android:layout_gravity="center_horizontal"
         />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/id_afficherCpSelect"
+        />
 
     <ListView
         android:id="@+id/id_lstCP"
