@@ -1,0 +1,35 @@
+package fr.lc.sio.lt.gsbmission5;
+
+import android.support.v7.app.AppCompatActivity;
+import android.graphics.Color;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.preference.PreferenceManager;
+import java.lang.String;
+import android.app.Activity;
+
+public class SaisirCPActivity extends AppCompatActivity {
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_saisir_cp);
+    }
+    public void retourMenu(View vue){
+        Intent connexion = new Intent(this, GsbMenuActivity.class);
+        startActivity(connexion);
+
+    }
+}
