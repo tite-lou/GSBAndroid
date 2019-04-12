@@ -132,12 +132,6 @@ public class VoirCPActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(jsonArraysRequest);
 
-
-
-
-
-
-
     }
     public void RecupeLaListCp(String[] list){
         ListCp = new String[list.length];

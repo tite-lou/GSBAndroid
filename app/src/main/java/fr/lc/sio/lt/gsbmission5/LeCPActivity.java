@@ -31,16 +31,20 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class LeCPActivity extends AppCompatActivity {
-    TextView leText;
+    TextView leText2,leText3,leText4;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_le_cp);
         SharedPreferences prefs = this.getSharedPreferences("default",0);
-        leText = (TextView) findViewById(R.id.textView2);
+        leText2 = (TextView) findViewById(R.id.textView2);
+        leText3 = (TextView) findViewById(R.id.textView3);
+        leText4 = (TextView) findViewById(R.id.textView4);
        int numRapport = prefs.getInt("numRapport",0)+1;
-       leText.setText(" "+ String.valueOf(numRapport));
+       leText2.setText(" "+ String.valueOf(numRapport));
        this.AfficherLeCp(numRapport);
+       String leVisiteur = "Realiser par :"+prefs.getString("nom","")+" "+prefs.getString("prenom","");
+       leText3.setText(leVisiteur);
     }
     public void retourChoix(View vue){
         Intent connexion = new Intent(this, VoirCPActivity.class);
@@ -59,25 +63,32 @@ public class LeCPActivity extends AppCompatActivity {
         SharedPreferences ps = this.getSharedPreferences("default",0);
 
         String ip = ps.getString("ip","");
-        String url =""+ip+"/recupRapportParId/"+ps.getString("id","")+"/"+numRapport;
-        Log.d("IP-voirActivity", url);
+        String url =""+ip+"/recupRapportParId/"+numRapport+"/"+ps.getString("id","");
+        Log.d("IP-LeCPActivity", url);
         Response.Listener<JSONObject> responseListener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-
-
+                Log.d("LECPACTIVITY-TRY","on est pas encore rentrer");
+                String newLigne =System.getProperty("line.separator");
                 try {
 
+                        Log.d("LECPACTIVITY-TRY","on est renter");
+
+
+                        String lePracticien = response.getJSONObject("praticien").getString("praNom")+newLigne+response.getJSONObject("praticien").getString("praPrenom")
+                                +newLigne+response.getJSONObject("praticien").getString("praAdresse")+" "+response.getJSONObject("praticien").getString("praCp")+ " "+
+                                response.getJSONObject("praticien").getString("praVille")+newLigne+response.getJSONObject("praticien").getString("praTypeCode");
 
 
 
-                        String resp = response.getJSONObject("praticien").getString("praNom")+"-"+response.getJSONObject("praticien").getString("praPrenom")+
-                                "-"+response.getString("consulte")+"-"+response.getString("dateRapport");
-                        Log.d("TEST-POURLECP",resp);
-                        leText.setText(resp);
-
-
-
+                        String infoCP="le Rapport numero : "+response.getString("rapNum")+response.getString("dateRapport")+newLigne+response.getString("dateVisite")+newLigne+response.getString("consulte")+
+                                " "+response.getString("bilan");
+                       // Log.d("TEST-POURLECP",resp);
+                        Log.d("LEPRACTICIEN",lePracticien);
+                        Log.d("LECPINFO",infoCP);
+                        leText2.setText(lePracticien);
+                       // leText3.setText(leVisiteur);
+                        leText4.setText(infoCP);
 
 
                 } catch (Exception e) {

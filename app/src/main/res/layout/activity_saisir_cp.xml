@@ -16,6 +16,12 @@
         android:layout_gravity="center_horizontal"
         />
 
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <CalendarView
         android:id="@+id/calendarView"
         android:layout_width="match_parent"
@@ -23,8 +29,9 @@
 
 
 
+
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/bilan"
         android:layout_width="match_parent"
         android:layout_height="160dp"
         android:ems="10"
