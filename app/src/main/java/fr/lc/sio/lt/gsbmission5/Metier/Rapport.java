@@ -4,14 +4,14 @@ import java.text.DateFormat;
 import java.util.Date;
 
 public class Rapport   {
-    private Practicien numPra;
+    private int numPra;
     private String id;
-    private Visiteur numVis;
+    private String numVis;
     private Date dateVisite, dateRapportEnv;
     private String commentaire;
 
 
-    public Rapport(Practicien numP, Visiteur numV, String id, String commentaire , Date dateV, Date dateRE){
+    public Rapport(int numP, String numV, String id, String commentaire , Date dateV, Date dateRE){
         this.numPra = numP;
         this.numVis= numV;
         this.id = id;
@@ -20,7 +20,7 @@ public class Rapport   {
         this.dateRapportEnv=dateRE;
     }
 
-    public Practicien getNumPra() {
+    public int getNumPra() {
         return numPra;
     }
 
@@ -36,7 +36,7 @@ public class Rapport   {
         return dateRapportEnv;
     }
 
-    public Visiteur getNumVis() {
+    public String getNumVis() {
         return numVis;
     }
 
@@ -56,7 +56,7 @@ public class Rapport   {
         this.id = id;
     }
 
-    public void setNumPra(Practicien numPra) {
+    public void setNumPra(int numPra) {
         this.numPra = numPra;
     }
 
@@ -64,7 +64,7 @@ public class Rapport   {
         this.dateRapportEnv = dateRapportEnv;
     }
 
-    public void setNumVis(Visiteur numVis) {
+    public void setNumVis(String numVis) {
         this.numVis = numVis;
     }
 }

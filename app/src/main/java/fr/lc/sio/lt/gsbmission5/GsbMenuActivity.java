@@ -56,7 +56,7 @@ public class GsbMenuActivity extends AppCompatActivity {
         startActivity(retourAccueil);
     }
     public void saisirCP(View vue){
-        Intent saisie = new Intent(this, ListePracticienActivity.class);
+        Intent saisie = new Intent(this, SaisirCPActivity.class);
         startActivity(saisie);
     }
     public void voirCP(View vue){

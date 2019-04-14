@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -12,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ListePracticienActivity"></activity>
+        <activity android:name=".VerificationActivity"></activity>
+        <activity android:name=".ListePracticienActivity" />
         <activity android:name=".ChoisirPracticienActivity" />
         <activity android:name=".ModifierLeCPActivity" />
         <activity android:name=".ChoisirModifierActivity" />
@@ -21,7 +23,6 @@
         <activity android:name=".SaisirCPActivity" />
         <activity android:name=".GsbMenuActivity" />
         <activity android:name=".MainActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -15,36 +15,182 @@ import android.widget.AdapterView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CalendarView;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.preference.PreferenceManager;
 import java.lang.String;
+import java.util.HashMap;
+import java.util.Map;
+
 import android.app.Activity;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Header;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.GsonBuilder;
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import fr.lc.sio.lt.gsbmission5.Metier.Rapport;
 
 public class SaisirCPActivity extends AppCompatActivity {
     Spinner listPraticien;
     String listP[] ;
+    int ListId[];
+    DatePicker date;
+    EditText bilan;
+    TextView leText;
+    int numRapport;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_saisir_cp);
+        listPraticien=(Spinner) findViewById(R.id.spinner3);
+        date =(DatePicker) findViewById(R.id.datepicker);
+        bilan =(EditText) findViewById(R.id.bilan);
+        leText=(TextView) findViewById(R.id.textView5);
+        this.RemplirSpinner();
+
     }
     public void retourMenu(View vue){
-        Intent connexion = new Intent(this, GsbMenuActivity.class);
+
+        final String  dateVisite = String.valueOf(date.getYear()+"-"+date.getMonth()+"-"+date.getDayOfMonth());
+        Log.d("TESTCALENDER",dateVisite);
+        final String bb = bilan.getText().toString();
+        final int praNum = ListId[numRapport];
+        SharedPreferences ps = this.getSharedPreferences("default",0);
+
+        String ip = ps.getString("ip","");
+        final String idVisi = ps.getString("id","");
+
+        //Rapport(Practicien numP, Visiteur numV, String id, String commentaire , Date dateV, Date dateRE)
+       // final Rapport  rapport = new Rapport(praNum, idVisi ,bb,dateVisite,"");
+        GsonBuilder fabrique = new GsonBuilder() ;
+        final Gson gson = fabrique.create() ;
+        String url = ""+ip+"/ajouterRapport" ;
+        try {
+            StringRequest requete = new StringRequest(
+                    Request.Method.POST,
+                    url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Log.d("REPONSE",response);
+                        }
+                    } ,
+                    new Response.ErrorListener(){
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.d("REPONSE",error.networkResponse.statusCode + error.getMessage(),error);
+                        }
+                    }
+            ) {
+
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+
+                    Map<String, String> parametres = new HashMap<String, String>();
+                    parametres.put("idVisi", gson.toJson(idVisi));
+                    parametres.put("praNum", gson.toJson(praNum));
+                    parametres.put("bilan", gson.toJson(bb));
+                    parametres.put("dateVisite", gson.toJson(dateVisite));
+                    Log.d("PARAMETRE", parametres.toString());
+                    return parametres;
+                }
+                /*
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> parametres = new HashMap<String, String>();
+                    parametres.put("Content-Type", "application/x-www-form-urlencoded");
+
+                    return parametres;
+                }*/
+            };
+        }
+        catch( Exception e ){
+            Log.e( "APP-RV" , e.getMessage() ) ;
+        }
+
+
+        /*SharedPreferences prefs = this.getSharedPreferences("default",0);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putInt("praNum",numRapport);*/
+
+        Intent connexion = new Intent(this, VerificationActivity.class);
         startActivity(connexion);
+
 
     }
     public void RemplirSpinner(){
 
+        SharedPreferences ps = this.getSharedPreferences("default",0);
+
+        String ip = ps.getString("ip","");
+        String url =""+ip+"/recupListePraticien/"+ps.getString("id","");
+        Log.d("IP-voirActivity", url);
+        Response.Listener<JSONArray> responseListener = new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+
+                String  List[] = new String[response.length()];
+                int lid[]= new int[response.length()];
+                try {
+                    for( int i = 0 ; i < response.length() ; i++) {
+                        JSONObject practicien = response.getJSONObject(i);
+                        Log.i("PRACTICIEN NOMPRENOM",practicien.getString("praNom")+" "+practicien.getString("praPrenom"));
+                        String resp = practicien.getString("praNom")+"-"+practicien.getString("praPrenom");
+                       List[i]= resp;
+
+                       lid[i]= Integer.parseInt(practicien.getString("praNum"));
+
+                    }
+
+
+                  RecupeLaListCp(List,lid);
+
+                } catch (Exception e) {
+
+                    Toast.makeText(SaisirCPActivity.this, "Echec de connexion ",
+                            Toast.LENGTH_LONG).show();
+                    Log.e("APP-RV", "Erreur 6: " + e.getMessage(),e);
+                }
+            }
+        };
+
+        Response.ErrorListener responseErrorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("APP_RV", "Erreur JSON : " + error.getMessage());
+                Log.d("vist", "error"+error.getMessage());
+            }
+        };
+
+        JsonArrayRequest jsonArraysRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                responseListener, responseErrorListener);
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(jsonArraysRequest);
+
     }
 
-    public void RecupeLaListCp(String[] list){
+    public void RecupeLaListCp(String[] list, int[] lid) {
         listP = new String[list.length];
-        listP = list;
-        Log.i("TEST-LIST",listP[1]);
+        ListId = lid;
+        listP =list;
+        Log.i("TEST-LIST", listP[1]);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 this,
                 android.R.layout.simple_list_item_1,
@@ -52,16 +198,40 @@ public class SaisirCPActivity extends AppCompatActivity {
         );
 
         listPraticien.setAdapter(adapter);
-        listPraticien.setOnItemClickListener(
-                new AdapterView.OnItemClickListener(){
+
+        listPraticien.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view,
+                                       int position, long id) {
+                Object item = adapterView.getItemAtPosition(position);
+                Log.d("ITEM:", item.toString());
+                numRapport = position;
+                leText.setText(String.valueOf(numRapport));
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+
+            }
+        });
+      /*  listPraticien.setOnItemSelectedListener(
+                new AdapterView.OnItemSelectedListener(){
                     @Override
                     public void onItemClick(AdapterView<?> parent, View vue, int position, long id){
                         String practicienSelect = listP[position];
-                        //numRapport = position;
-                       // lePractSelect.setText(practicienSelect+" "+String.valueOf(numRapport));
+                        numRapport = position;
+                        leText.setText(practicienSelect+" "+String.valueOf(numRapport));
 
                     }
                 }
-        );
+        );*/
+
+
     }
+
+
 }
