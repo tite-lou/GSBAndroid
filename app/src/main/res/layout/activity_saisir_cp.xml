@@ -49,7 +49,7 @@
             android:layout_marginLeft="20dp"
 
             android:text="Valider"
-            android:onClick="retourMenu"/>
+            android:onClick="envoiRapport"/>
 
         <Button
             android:id="@+id/btn_annuler"

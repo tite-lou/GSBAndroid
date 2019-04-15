@@ -2,37 +2,44 @@ package fr.lc.sio.lt.gsbmission5.Metier;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class Rapport   {
     private int numPra;
     private String id;
     private String numVis;
-    private Date dateVisite, dateRapportEnv;
-    private String commentaire;
+    private GregorianCalendar dateVisite, dateRapportEnv;
+    private String rapBilan;
 
 
-    public Rapport(int numP, String numV, String id, String commentaire , Date dateV, Date dateRE){
+    public Rapport(int numP, String numV, String id, String commentaire , GregorianCalendar dateV, GregorianCalendar dateRE){
         this.numPra = numP;
         this.numVis= numV;
         this.id = id;
-        this.commentaire= commentaire;
+        this.rapBilan= commentaire;
         this.dateVisite=dateV;
         this.dateRapportEnv=dateRE;
+    }
+    public Rapport(int numPraticien, String numVisiteur, String commentaire, GregorianCalendar dateVisite){
+        this.numPra = numPraticien;
+        this.numVis = numVisiteur;
+        this.rapBilan = commentaire;
+        this.dateVisite = dateVisite;
     }
 
     public int getNumPra() {
         return numPra;
     }
 
-    public Date getDateVisite() {
+    public GregorianCalendar getDateVisite() {
         return dateVisite;
     }
 
-    public String getCommentaire() {
-        return commentaire;
+    public String getRapBilan() {
+        return rapBilan;
     }
 
-    public Date getDateRapportEnv() {
+    public GregorianCalendar getDateRapportEnv() {
         return dateRapportEnv;
     }
 
@@ -44,11 +51,11 @@ public class Rapport   {
         return id;
     }
 
-    public void setCommentaire(String commentaire) {
-        this.commentaire = commentaire;
+    public void setRapBilan(String commentaire) {
+        this.rapBilan = commentaire;
     }
 
-    public void setDateVisite(Date dateVisite) {
+    public void setDateVisite(GregorianCalendar dateVisite) {
         this.dateVisite = dateVisite;
     }
 
@@ -60,11 +67,13 @@ public class Rapport   {
         this.numPra = numPra;
     }
 
-    public void setDateRapportEnv(Date dateRapportEnv) {
+    public void setDateRapportEnv(GregorianCalendar dateRapportEnv) {
         this.dateRapportEnv = dateRapportEnv;
     }
 
     public void setNumVis(String numVis) {
         this.numVis = numVis;
     }
+
+
 }

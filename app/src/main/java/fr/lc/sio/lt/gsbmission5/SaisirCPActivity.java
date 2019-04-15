@@ -24,6 +24,8 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.preference.PreferenceManager;
 import java.lang.String;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,6 +56,7 @@ public class SaisirCPActivity extends AppCompatActivity {
     EditText bilan;
     TextView leText;
     int numRapport;
+    String rapportToString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +69,7 @@ public class SaisirCPActivity extends AppCompatActivity {
         this.RemplirSpinner();
 
     }
+    /*
     public void retourMenu(View vue){
 
         final String  dateVisite = String.valueOf(date.getYear()+"-"+date.getMonth()+"-"+date.getDayOfMonth());
@@ -118,7 +122,7 @@ public class SaisirCPActivity extends AppCompatActivity {
                     parametres.put("Content-Type", "application/x-www-form-urlencoded");
 
                     return parametres;
-                }*/
+                }
             };
         }
         catch( Exception e ){
@@ -126,15 +130,103 @@ public class SaisirCPActivity extends AppCompatActivity {
         }
 
 
-        /*SharedPreferences prefs = this.getSharedPreferences("default",0);
+        SharedPreferences prefs = this.getSharedPreferences("default",0);
         SharedPreferences.Editor edit = prefs.edit();
-        edit.putInt("praNum",numRapport);*/
+        edit.putInt("praNum",numRapport);
 
         Intent connexion = new Intent(this, VerificationActivity.class);
         startActivity(connexion);
 
 
     }
+*/
+    public void envoiRapport(View vue) {
+
+            /*final String  dateVisite = String.valueOf(date.getYear()+"-"+date.getMonth()+"-"+date.getDayOfMonth());
+            Log.d("TESTCALENDER",dateVisite);
+            final String bb = bilan.getText().toString();
+            final int praNum = ListId[numRapport];
+            SharedPreferences ps = this.getSharedPreferences("default",0);
+
+            String ip = ps.getString("ip","");
+            final String idVisi = ps.getString("id","");
+            */
+        // Insyanciation directe sans passer par le mobile, donc à remplacer quand on récupère les
+        // données depuis la vue android
+
+
+        SharedPreferences session = this.getSharedPreferences("default",0);
+
+        String ip = session.getString("ip","");
+        final String idVisi = session.getString("id","");
+
+
+
+        String url = ip +"/ajouterRapport";
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+
+        final String commentaire = bilan.getText().toString();
+        final int praNum = ListId[numRapport];
+        SharedPreferences ps = this.getSharedPreferences("default",0);
+
+        StringRequest requete = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("REPONSE", response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("ERROR", error.networkResponse.statusCode + error.getMessage(), error);
+                    }
+                }
+        ) {
+
+            @Override
+            protected Map<String, String> getParams() {
+
+                GsonBuilder fabrique = new GsonBuilder();
+                final Gson gson = fabrique.create();
+
+                Rapport rapport = new Rapport(praNum, idVisi, commentaire, new GregorianCalendar(date.getYear(), date.getMonth(), date.getDayOfMonth()));
+//Rapport rapport = new Rapport(1,"a131","a", new GregorianCalendar(2018,02,15));
+                rapportToString = gson.toJson(rapport);
+
+                Map<String, String> parametres = new HashMap<String, String>();
+
+
+                Log.d("Debug parametre", rapportToString);
+                System.out.println("Rapport"+rapportToString);
+                parametres.put("rapport",rapportToString);
+
+                return parametres;
+            }
+
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/x-www-form-urlencoded");
+
+                return headers;
+            }
+        };
+        queue.add(requete);
+
+
+
+        Intent connexion = new Intent(this, GsbMenuActivity.class);
+        startActivity(connexion);
+
+
+    }
+
+
     public void RemplirSpinner(){
 
         SharedPreferences ps = this.getSharedPreferences("default",0);
