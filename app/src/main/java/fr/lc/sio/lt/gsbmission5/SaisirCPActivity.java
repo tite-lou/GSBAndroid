@@ -58,6 +58,8 @@ public class SaisirCPActivity extends AppCompatActivity {
     int numRapport;
     String rapportToString;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +68,7 @@ public class SaisirCPActivity extends AppCompatActivity {
         date =(DatePicker) findViewById(R.id.datepicker);
         bilan =(EditText) findViewById(R.id.bilan);
         leText=(TextView) findViewById(R.id.textView5);
+
         this.RemplirSpinner();
 
     }
@@ -163,6 +166,7 @@ public class SaisirCPActivity extends AppCompatActivity {
 
 
         String url = ip +"/ajouterRapport";
+       // String url = ip +"/lesCR";
         RequestQueue queue = Volley.newRequestQueue(this);
 
 
@@ -194,7 +198,7 @@ public class SaisirCPActivity extends AppCompatActivity {
                 final Gson gson = fabrique.create();
 
                 Rapport rapport = new Rapport(praNum, idVisi, commentaire, new GregorianCalendar(date.getYear(), date.getMonth(), date.getDayOfMonth()));
-//Rapport rapport = new Rapport(1,"a131","a", new GregorianCalendar(2018,02,15));
+
                 rapportToString = gson.toJson(rapport);
 
                 Map<String, String> parametres = new HashMap<String, String>();

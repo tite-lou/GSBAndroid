@@ -37,11 +37,12 @@ public class GsbMenuActivity extends AppCompatActivity {
 
        // SharedPreferences prefs.get
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences prefs = this.getSharedPreferences("default",0);
 
 
         String id = prefs.getString("id","");
-        String prenom = prefs.getString("prenom","");
+        String prenom = prefs.getString("prenomVist","");
+        Log.d("PRENOM",prenom);
         txtBienvenu = (TextView) findViewById(R.id.id_bienvenue);
         txtBienvenu.setText("Bonjour : "+prenom);
         //Log.d("jh",  res);

@@ -21,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.preference.PreferenceManager;
@@ -51,15 +52,18 @@ public class VoirCPActivity extends AppCompatActivity {
 
     ListView lesPracticiens;
     TextView lePractSelect;
-   String ListCp[] ;
+   String ListCp[],ListMA[] ;
     int numRapport;
+    Spinner lespinner;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_voir_cp);
         lesPracticiens = (ListView) findViewById(R.id.id_lstCP);
         lePractSelect=(TextView) findViewById(R.id.id_afficherCpSelect);
-        this.AfficherListCp();
+        lespinner=(Spinner) findViewById(R.id.spinner);
+        //this.AfficherListCp();
+        this.AfficherLesMoisAnneeCp();
 
       /*  ArrayAdapter<String> adapter = new ArrayAdapter<String>(
              this,
@@ -82,28 +86,95 @@ public class VoirCPActivity extends AppCompatActivity {
         startActivity(connexion);
 
     }
+    public void AfficherLesMoisAnneeCp(){
+        SharedPreferences ps = this.getSharedPreferences("default",0);
 
-    public void AfficherListCp (){
+        String ip = ps.getString("ip","");
+        // String url =""+ip+"/recupListeRapport/"+ps.getString("id","");
+        String url =""+ip+"/lesCR/"+ps.getString("id","");
+        Log.d("IP-voirActivity", url);
+        Response.Listener<JSONArray> responseListener = new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+
+                String  List[] = new String[response.length()];
+                Log.d("LENGHT :", String.valueOf(response.length()));
+                try {
+                    boolean possible;
+                    for( int i = 0 ; i < response.length() ; i++) {
+
+                        JSONObject practicien = response.getJSONObject(i);
+                        Log.i("Test 2",practicien.getJSONObject("rapDateRapport").getString("date"));
+                        // String resp = practicien.getJSONObject("praticien").getString("praNom")+"-"+practicien.getJSONObject("praticien").getString("praPrenom")+
+                        //         "-"+practicien.getString("consulte")+"-"+practicien.getString("dateRapport");
+                        String resp = practicien.getJSONObject("rapDateRapport").getString("date");
+                        resp = resp.substring(0,7);
+                        Log.d("RESP",resp);
+                         possible=  false;
+                        for(int j = 0; j<List.length; j++){
+                            if(List[j].equals(resp)){
+                                possible = false;
+                            }else{
+                                possible = true;
+                            }
+                        }
+                        if(possible == true){
+                            List[i]= resp;
+                        }
+
+                    }
+                    Log.d("LIST",List[1]);
+
+                   // RecupeLaListCp(List);
+                    RecupListMoisAnneeCP(List);
+                } catch (Exception e) {
+
+                    Toast.makeText(VoirCPActivity.this, "Echec de connexion ",
+                            Toast.LENGTH_LONG).show();
+                    Log.e("APP-RV", "Erreur : " + e.getMessage());
+                }
+            }
+        };
+
+        Response.ErrorListener responseErrorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("APP_RV", "Erreur JSON : " + error.getMessage());
+                Log.d("vist", "error"+error.getMessage());
+            }
+        };
+
+        JsonArrayRequest jsonArraysRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                responseListener, responseErrorListener);
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(jsonArraysRequest);
+
+    }
+
+    public void AfficherListCp (String date){
 
 
 
         SharedPreferences ps = this.getSharedPreferences("default",0);
 
         String ip = ps.getString("ip","");
-        String url =""+ip+"/recupListeRapport/"+ps.getString("id","");
+        String url =""+ip+"/recupRapportParDate/"+ps.getString("id","")+"/"+date;
+       // String url =""+ip+"/lesCR/"+ps.getString("id","");
         Log.d("IP-voirActivity", url);
         Response.Listener<JSONArray> responseListener = new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
 
                String  List[] = new String[response.length()];
+               Log.d("LENGHT :", String.valueOf(response.length()));
                 try {
                     for( int i = 0 ; i < response.length() ; i++) {
 
                         JSONObject practicien = response.getJSONObject(i);
                         Log.i("Test 2",practicien.getJSONObject("praticien").getString("praTypeCode"));
                         String resp = practicien.getJSONObject("praticien").getString("praNom")+"-"+practicien.getJSONObject("praticien").getString("praPrenom")+
-                                "-"+practicien.getString("consulte")+"-"+practicien.getString("dateRapport");
+                               "-"+practicien.getString("consulte")+"-"+practicien.getString("dateRapport");
+
                         List[i]= resp;
                     }
 
@@ -155,6 +226,39 @@ public class VoirCPActivity extends AppCompatActivity {
                     }
                 }
         );
+    }
+    public void RecupListMoisAnneeCP(String[] List){
+        ListMA = new String[List.length];
+        ListMA = List;
+        Log.i("TEST-LIST",ListMA[1]);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_list_item_1,
+                ListMA
+        );
+
+        lespinner.setAdapter(adapter);
+        lespinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view,
+                                       int position, long id) {
+                Object item = adapterView.getItemAtPosition(position);
+                Log.d("ITEM:", item.toString());
+                numRapport = position;
+                lePractSelect.setText(String.valueOf(numRapport));
+                String date = ListMA[position];
+                AfficherListCp(date);
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+
+            }
+        });
     }
 
 

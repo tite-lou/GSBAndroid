@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         mdp = (EditText) findViewById(R.id.edt_mdp);
         SharedPreferences ps = this.getSharedPreferences("default",0);
         SharedPreferences.Editor edit = ps.edit();
-        edit.putString("ip","http://10.20.128.127/gsbAndroid/web/app.php");
+        edit.putString("ip","http://172.20.10.5/gsbAndroid/web/app.php");
         edit.commit();
     }
     public void seConnecter(View vue){
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                 try {
-                    Log.d("vist", response.getString("visNom"));
+                    Log.d("vist", response.getString("visPrenom"));
                     if(response.toString().equals("false")){
                         Toast.makeText(MainActivity.this, "Echec de connexion ",
                                 Toast.LENGTH_LONG).show();
@@ -122,7 +122,8 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor edit = prefs.edit();
         edit.putString("id",matricule);
         edit.putString("nom", visiteur.getVisNom());
-        edit.putString("prenom", visiteur.getVisPrenom());
+        Log.d("PRENOM ENREG",prenom);
+        edit.putString("prenomVist", prenom);
         edit.commit();
 
         Intent connexion = new Intent(this, GsbMenuActivity.class);
@@ -135,6 +136,8 @@ public class MainActivity extends AppCompatActivity {
         // Action sur clic du bouton Annuler
         login.setText("");
         mdp.setText("");
+        SharedPreferences pref = this.getSharedPreferences("default",0);
+        pref.edit().clear().commit();
 
     }
 }
