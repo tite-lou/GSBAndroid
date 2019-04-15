@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".GsbMenuActivity"
+    android:background="#8BAFD8"
     android:orientation="vertical">
 
 
