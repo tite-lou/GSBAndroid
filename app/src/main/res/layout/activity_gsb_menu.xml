@@ -44,37 +44,25 @@
             android:id="@+id/btn_saisir"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5"
             android:layout_marginLeft="20dp"
+            android:layout_weight="0.5"
 
-            android:text="Saisir Compte-Rendu"
-            android:onClick="saisirCP"/>
+            android:onClick="saisirCP"
+            android:text="Saisir Compte-Rendu" />
 
         <Button
             android:id="@+id/btn_voir"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
+            android:layout_weight="0.5"
 
-            android:text="Voir Les Compte-Rendu"
             android:onClick="voirCP"
-            />
+            android:text="Voir Les Compte-Rendu" />
 
 
     </LinearLayout>
-
-    <Button
-        android:id="@+id/btn_modifier"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="95dp"
-        android:layout_marginRight="30dp"
-
-
-        android:onClick="choisirModifier"
-        android:text="Modifier  Compte-Rendu" />
 
     <Button
         android:layout_width="wrap_content"

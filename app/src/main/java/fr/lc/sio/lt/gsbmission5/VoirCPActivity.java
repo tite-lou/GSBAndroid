@@ -52,8 +52,10 @@ public class VoirCPActivity extends AppCompatActivity {
 
     ListView lesPracticiens;
     TextView lePractSelect;
-   String ListCp[] ;
+    ArrayList<String> ListCp ;
    ArrayList<String> ListMA;
+   String dtt;
+   ArrayList<String> ListIdRapport;
     int numRapport;
     Spinner lespinner;
     @Override
@@ -151,22 +153,27 @@ public class VoirCPActivity extends AppCompatActivity {
 
     }
 
-    public void AfficherListCp (String date){
+    public void AfficherListCp (){
 
 
+        Log.d("DATE :", " "+dtt);
 
         SharedPreferences ps = this.getSharedPreferences("default",0);
 
         String ip = ps.getString("ip","");
-        String url =""+ip+"/recupRapportParDate/"+ps.getString("id","")+"/"+date;
+        String url =""+ip+"/recupListeRapport/"+ps.getString("id","");
        // String url =""+ip+"/lesCR/"+ps.getString("id","");
         Log.d("IP-voirActivity", url);
         Response.Listener<JSONArray> responseListener = new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
 
-               String  List[] = new String[response.length()];
-               Log.d("LENGHT :", String.valueOf(response.length()));
+               ArrayList<String> List = new ArrayList<String>();
+               ArrayList<String> ListIdRap = new ArrayList<String>();
+               Log.d("LENGHTDELISTVIEW :", String.valueOf(response.length()));
+                String annee1=dtt.substring(0,4);
+
+                String mois2= dtt.substring(5,7);
                 try {
                     for( int i = 0 ; i < response.length() ; i++) {
 
@@ -174,12 +181,23 @@ public class VoirCPActivity extends AppCompatActivity {
                         Log.i("Test 2",practicien.getJSONObject("praticien").getString("praTypeCode"));
                         String resp = practicien.getJSONObject("praticien").getString("praNom")+"-"+practicien.getJSONObject("praticien").getString("praPrenom")+
                                "-"+practicien.getString("consulte")+"-"+practicien.getString("dateRapport");
+                        String verifDate = practicien.getString("dateRapport");
+                        String idRapport = practicien.getString("rapNum");
+                        Log.d("verifDate",""+verifDate);
+                       String annee2= verifDate.substring(6,10);
+                       Log.d("annee2", ""+annee2);
+                        String mois1 = verifDate.substring(3,5);
+                        if(annee2.equals(annee1)&& mois2.equals(mois1)){
+                            List.add(resp);
+                            ListIdRap.add(idRapport);
 
-                        List[i]= resp;
+                          Log.i("debuf if ", ""+resp+" id "+idRapport);
+                       }
+
                     }
 
 
-                    RecupeLaListCp(List);
+                    RecupeLaListCp(List,ListIdRap);
 
                 } catch (Exception e) {
 
@@ -204,22 +222,15 @@ public class VoirCPActivity extends AppCompatActivity {
         requestQueue.add(jsonArraysRequest);
 
     }
-    public void RecupeLaListCp(String[] list){
+    public void RecupeLaListCp(ArrayList list,ArrayList listId){
 
-        int nbReponseBonne=0;
-        ListCp = list;
-        for (int i=0;i<list.length;i++){
-            if(list[i] != null){
-                nbReponseBonne++;
-            }
-        }
-        ListCp = new String[nbReponseBonne];
-        int i =0;
-       while(list[i]!= null){
-        //   ListCp
-       }
 
-        Log.i("TEST-LIST",ListCp[1]);
+        ListCp = new ArrayList<String>();
+        ListCp= list;
+        ListIdRapport=listId;
+
+
+        Log.i("TEST-LIST",""+ListCp.get(0));
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 this,
                 android.R.layout.simple_list_item_1,
@@ -231,9 +242,9 @@ public class VoirCPActivity extends AppCompatActivity {
                 new OnItemClickListener(){
                     @Override
                     public void onItemClick(AdapterView<?> parent, View vue, int position, long id){
-                        String practicienSelect = ListCp[position];
-                        numRapport = position;
-                        lePractSelect.setText(practicienSelect+" "+String.valueOf(numRapport));
+                        String practicienSelect = ListCp.get(position);
+                        numRapport = Integer.valueOf(ListIdRapport.get(position));
+                        lePractSelect.setText(practicienSelect+" RApNUM "+String.valueOf(numRapport));
 
                     }
                 }
@@ -258,8 +269,9 @@ public class VoirCPActivity extends AppCompatActivity {
                 Object item = adapterView.getItemAtPosition(position);
                 Log.d("ITEM:", item.toString());
                 numRapport = position;
-                lePractSelect.setText(String.valueOf(numRapport));
-
+                lePractSelect.setText(String.valueOf(numRapport)+item.toString());
+                dtt = item.toString();
+                AfficherListCp();
 
             }
 

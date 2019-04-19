@@ -40,7 +40,7 @@ public class LeCPActivity extends AppCompatActivity {
         leText2 = (TextView) findViewById(R.id.textView2);
         leText3 = (TextView) findViewById(R.id.textView3);
         leText4 = (TextView) findViewById(R.id.textView4);
-       int numRapport = prefs.getInt("numRapport",0)+1;
+       int numRapport = prefs.getInt("numRapport",0);
        leText2.setText(" "+ String.valueOf(numRapport));
        this.AfficherLeCp(numRapport);
        String leVisiteur = "Realiser par :"+prefs.getString("nom","")+" "+prefs.getString("prenom","");
