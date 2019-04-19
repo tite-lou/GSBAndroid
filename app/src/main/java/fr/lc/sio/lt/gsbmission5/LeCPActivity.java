@@ -44,7 +44,7 @@ public class LeCPActivity extends AppCompatActivity {
        leText2.setText(" "+ String.valueOf(numRapport));
        this.AfficherLeCp(numRapport);
        String leVisiteur = "Realiser par :"+prefs.getString("nom","")+" "+prefs.getString("prenom","");
-       leText3.setText(leVisiteur);
+       leText4.setText(leVisiteur);
     }
     public void retourChoix(View vue){
         Intent connexion = new Intent(this, VoirCPActivity.class);
@@ -75,20 +75,20 @@ public class LeCPActivity extends AppCompatActivity {
                         Log.d("LECPACTIVITY-TRY","on est renter");
 
 
-                        String lePracticien = response.getJSONObject("praticien").getString("praNom")+newLigne+response.getJSONObject("praticien").getString("praPrenom")
-                                +newLigne+response.getJSONObject("praticien").getString("praAdresse")+" "+response.getJSONObject("praticien").getString("praCp")+ " "+
+                        String lePracticien = " Praticien Concerné: "+response.getJSONObject("praticien").getString("praNom")+response.getJSONObject("praticien").getString("praPrenom")
+                                +newLigne+"Adresse :"+response.getJSONObject("praticien").getString("praAdresse")+" "+response.getJSONObject("praticien").getString("praCp")+ " "+
                                 response.getJSONObject("praticien").getString("praVille")+newLigne+response.getJSONObject("praticien").getString("praTypeCode");
 
 
 
-                        String infoCP="le Rapport numero : "+response.getString("rapNum")+response.getString("dateRapport")+newLigne+response.getString("dateVisite")+newLigne+response.getString("consulte")+
-                                " "+response.getString("bilan");
+                        String infoCP="le Rapport numero : "+response.getString("rapNum")+newLigne+" fait le : "+response.getString("dateRapport")+newLigne+" Pour la visite du :"+newLigne+response.getString("dateVisite")+newLigne+"Consulter :"+response.getString("consulte")+
+                                newLigne+" Observation : "+response.getString("bilan");
                        // Log.d("TEST-POURLECP",resp);
                         Log.d("LEPRACTICIEN",lePracticien);
                         Log.d("LECPINFO",infoCP);
                         leText2.setText(lePracticien);
                        // leText3.setText(leVisiteur);
-                        leText4.setText(infoCP);
+                        leText3.setText(infoCP);
 
 
                 } catch (Exception e) {

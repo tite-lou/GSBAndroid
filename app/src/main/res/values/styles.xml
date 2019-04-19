@@ -7,6 +7,9 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">#0F3B6D</item>
     </style>
+    <style name="GreenText" parent="TextAppearance.AppCompat.Headline">
+        <item name="android:textColor">#4179B9</item>
+    </style>
     <style name="Layout">
         <item name="android:background">#8BAFD8</item>
         <item name="android:padding">5sp</item>

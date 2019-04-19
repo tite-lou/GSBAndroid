@@ -8,28 +8,37 @@
     tools:context=".LeCPActivity">
 
     <TextView
+        android:id="@+id/textView4"
+        style="@style/GreenText"
+        android:layout_width="350dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:text="TextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display4" />
+    <TextView
         android:id="@+id/textView2"
         android:layout_width="350dp"
-        android:layout_height="20dp"
-        android:layout_weight="0.5"
+        style="@style/GreenText"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display2"
         android:text="TextView" />
 
     <TextView
         android:id="@+id/textView3"
+        style="@style/GreenText"
         android:layout_width="350dp"
-        android:layout_height="20dp"
-        android:layout_weight="0.5"
-        android:text="TextView" />
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="350dp"
-        android:layout_height="20dp"
-        android:layout_weight="0.5"
-        android:text="TextView" />
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:text="TextView"
+        tools:text="@tools:sample/cities" />
+
+
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:orientation="horizontal">
 
         <Button

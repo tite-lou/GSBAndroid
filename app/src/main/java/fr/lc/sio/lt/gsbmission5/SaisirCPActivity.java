@@ -72,7 +72,10 @@ public class SaisirCPActivity extends AppCompatActivity {
         this.RemplirSpinner();
 
     }
-
+    public void RetourMenu(View vue){
+        Intent connexion = new Intent(this, GsbMenuActivity.class);
+        startActivity(connexion);
+    }
     public void envoiRapport(View vue) {
 
             /*final String  dateVisite = String.valueOf(date.getYear()+"-"+date.getMonth()+"-"+date.getDayOfMonth());
@@ -148,7 +151,8 @@ public class SaisirCPActivity extends AppCompatActivity {
         };
         queue.add(requete);
 
-
+        Toast.makeText(SaisirCPActivity.this, "Votre Rapport à bien été enregistré ",
+                Toast.LENGTH_LONG).show();
 
         Intent connexion = new Intent(this, GsbMenuActivity.class);
         startActivity(connexion);
