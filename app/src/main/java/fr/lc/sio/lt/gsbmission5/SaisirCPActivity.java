@@ -72,87 +72,13 @@ public class SaisirCPActivity extends AppCompatActivity {
         this.RemplirSpinner();
 
     }
-    /*
-    public void retourMenu(View vue){
 
-        final String  dateVisite = String.valueOf(date.getYear()+"-"+date.getMonth()+"-"+date.getDayOfMonth());
-        Log.d("TESTCALENDER",dateVisite);
-        final String bb = bilan.getText().toString();
-        final int praNum = ListId[numRapport];
-        SharedPreferences ps = this.getSharedPreferences("default",0);
-
-        String ip = ps.getString("ip","");
-        final String idVisi = ps.getString("id","");
-
-        //Rapport(Practicien numP, Visiteur numV, String id, String commentaire , Date dateV, Date dateRE)
-       // final Rapport  rapport = new Rapport(praNum, idVisi ,bb,dateVisite,"");
-        GsonBuilder fabrique = new GsonBuilder() ;
-        final Gson gson = fabrique.create() ;
-        String url = ""+ip+"/ajouterRapport" ;
-        try {
-            StringRequest requete = new StringRequest(
-                    Request.Method.POST,
-                    url,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            Log.d("REPONSE",response);
-                        }
-                    } ,
-                    new Response.ErrorListener(){
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.d("REPONSE",error.networkResponse.statusCode + error.getMessage(),error);
-                        }
-                    }
-            ) {
-
-                @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-
-                    Map<String, String> parametres = new HashMap<String, String>();
-                    parametres.put("idVisi", gson.toJson(idVisi));
-                    parametres.put("praNum", gson.toJson(praNum));
-                    parametres.put("bilan", gson.toJson(bb));
-                    parametres.put("dateVisite", gson.toJson(dateVisite));
-                    Log.d("PARAMETRE", parametres.toString());
-                    return parametres;
-                }
-                /*
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String, String> parametres = new HashMap<String, String>();
-                    parametres.put("Content-Type", "application/x-www-form-urlencoded");
-
-                    return parametres;
-                }
-            };
-        }
-        catch( Exception e ){
-            Log.e( "APP-RV" , e.getMessage() ) ;
-        }
-
-
-        SharedPreferences prefs = this.getSharedPreferences("default",0);
-        SharedPreferences.Editor edit = prefs.edit();
-        edit.putInt("praNum",numRapport);
-
-        Intent connexion = new Intent(this, VerificationActivity.class);
-        startActivity(connexion);
-
-
-    }
-*/
     public void envoiRapport(View vue) {
 
             /*final String  dateVisite = String.valueOf(date.getYear()+"-"+date.getMonth()+"-"+date.getDayOfMonth());
             Log.d("TESTCALENDER",dateVisite);
             final String bb = bilan.getText().toString();
             final int praNum = ListId[numRapport];
-            SharedPreferences ps = this.getSharedPreferences("default",0);
-
-            String ip = ps.getString("ip","");
-            final String idVisi = ps.getString("id","");
             */
         // Insyanciation directe sans passer par le mobile, donc à remplacer quand on récupère les
         // données depuis la vue android
