@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         mdp = (EditText) findViewById(R.id.edt_mdp);
         SharedPreferences ps = this.getSharedPreferences("default",0);
         SharedPreferences.Editor edit = ps.edit();
-        edit.putString("ip","http://172.20.10.5/gsbAndroid/web/app.php");
+        edit.putString("ip","http://10.20.65.171/gsbAndroid/web/app.php");
         edit.commit();
     }
     public void seConnecter(View vue){

@@ -31,7 +31,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
+import android.widget.AdapterView.OnItemSelectedListener;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -52,7 +52,8 @@ public class VoirCPActivity extends AppCompatActivity {
 
     ListView lesPracticiens;
     TextView lePractSelect;
-   String ListCp[],ListMA[] ;
+   String ListCp[] ;
+   ArrayList<String> ListMA;
     int numRapport;
     Spinner lespinner;
     @Override
@@ -89,44 +90,43 @@ public class VoirCPActivity extends AppCompatActivity {
     public void AfficherLesMoisAnneeCp(){
         SharedPreferences ps = this.getSharedPreferences("default",0);
 
-        String ip = ps.getString("ip","");
+        final String ip = ps.getString("ip","");
         // String url =""+ip+"/recupListeRapport/"+ps.getString("id","");
-        String url =""+ip+"/lesCR/"+ps.getString("id","");
+        String url =""+ip+"/recupDateDuRapport/"+ps.getString("id","");
         Log.d("IP-voirActivity", url);
         Response.Listener<JSONArray> responseListener = new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
 
-                String  List[] = new String[response.length()];
+                ArrayList<String> Listes = new ArrayList<String>();
                 Log.d("LENGHT :", String.valueOf(response.length()));
                 try {
                     boolean possible;
                     for( int i = 0 ; i < response.length() ; i++) {
 
                         JSONObject practicien = response.getJSONObject(i);
-                        Log.i("Test 2",practicien.getJSONObject("rapDateRapport").getString("date"));
+                        Log.i("Test 2", practicien.getString("date"));
                         // String resp = practicien.getJSONObject("praticien").getString("praNom")+"-"+practicien.getJSONObject("praticien").getString("praPrenom")+
                         //         "-"+practicien.getString("consulte")+"-"+practicien.getString("dateRapport");
-                        String resp = practicien.getJSONObject("rapDateRapport").getString("date");
-                        resp = resp.substring(0,7);
-                        Log.d("RESP",resp);
-                         possible=  false;
-                        for(int j = 0; j<List.length; j++){
-                            if(List[j].equals(resp)){
-                                possible = false;
-                            }else{
+                        String resp = practicien.getString("date");
+                        resp = resp.substring(0, 7);
+                        Log.d("RESP", "" + resp);
+                        possible = false;
+
+
+                        for(String element: Listes){
+                            if(element.equals(resp)){
                                 possible = true;
                             }
                         }
-                        if(possible == true){
-                            List[i]= resp;
+                        if(possible == false){
+                             Listes.add(resp);
                         }
 
                     }
-                    Log.d("LIST",List[1]);
 
                    // RecupeLaListCp(List);
-                    RecupListMoisAnneeCP(List);
+                    RecupListMoisAnneeCP(Listes);
                 } catch (Exception e) {
 
                     Toast.makeText(VoirCPActivity.this, "Echec de connexion ",
@@ -205,8 +205,20 @@ public class VoirCPActivity extends AppCompatActivity {
 
     }
     public void RecupeLaListCp(String[] list){
-        ListCp = new String[list.length];
+
+        int nbReponseBonne=0;
         ListCp = list;
+        for (int i=0;i<list.length;i++){
+            if(list[i] != null){
+                nbReponseBonne++;
+            }
+        }
+        ListCp = new String[nbReponseBonne];
+        int i =0;
+       while(list[i]!= null){
+        //   ListCp
+       }
+
         Log.i("TEST-LIST",ListCp[1]);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 this,
@@ -227,18 +239,18 @@ public class VoirCPActivity extends AppCompatActivity {
                 }
         );
     }
-    public void RecupListMoisAnneeCP(String[] List){
-        ListMA = new String[List.length];
+    public void RecupListMoisAnneeCP(ArrayList List){
+
         ListMA = List;
-        Log.i("TEST-LIST",ListMA[1]);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(
                 this,
                 android.R.layout.simple_list_item_1,
                 ListMA
         );
 
-        lespinner.setAdapter(adapter);
-        lespinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        lespinner.setAdapter(adapter2);
+        lespinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view,
@@ -247,8 +259,6 @@ public class VoirCPActivity extends AppCompatActivity {
                 Log.d("ITEM:", item.toString());
                 numRapport = position;
                 lePractSelect.setText(String.valueOf(numRapport));
-                String date = ListMA[position];
-                AfficherListCp(date);
 
 
             }
