@@ -72,10 +72,13 @@ public class SaisirCPActivity extends AppCompatActivity {
         this.RemplirSpinner();
 
     }
+    // méthode pour retourner au menus
     public void RetourMenu(View vue){
         Intent connexion = new Intent(this, GsbMenuActivity.class);
         startActivity(connexion);
     }
+    //méthode qui permet à la saisie des différents champs du formulaire et du clique sur le bouton valider, d'envoyer un objet JSON au service web qui se
+    //charge d'enregistrer un nouveau rapport avec les parametres qui lui seront envoyé.
     public void envoiRapport(View vue) {
 
             /*final String  dateVisite = String.valueOf(date.getYear()+"-"+date.getMonth()+"-"+date.getDayOfMonth());
@@ -95,14 +98,15 @@ public class SaisirCPActivity extends AppCompatActivity {
 
 
         String url = ip +"/ajouterRapport";
-       // String url = ip +"/lesCR";
+
         RequestQueue queue = Volley.newRequestQueue(this);
 
-
+        // requte POST qui envoie l'objet rapport sous formta objet JSON au web service
         final String commentaire = bilan.getText().toString();
         final int praNum = ListId[numRapport];
         SharedPreferences ps = this.getSharedPreferences("default",0);
 
+        // déclaration de la requete
         StringRequest requete = new StringRequest(
                 Request.Method.POST,
                 url,
@@ -122,7 +126,7 @@ public class SaisirCPActivity extends AppCompatActivity {
 
             @Override
             protected Map<String, String> getParams() {
-
+                // Fabrication de l'objet avec tour les parametres récupérés via le formulaire et convertion en format JSON
                 GsonBuilder fabrique = new GsonBuilder();
                 final Gson gson = fabrique.create();
 
@@ -160,7 +164,10 @@ public class SaisirCPActivity extends AppCompatActivity {
 
     }
 
-
+    // méthode pour remplir la liste déroulante en affichant uniquement les practiciens qui sont lié au visteur connecté
+    // Via le service web, la méthode récupére un tableau JSON avec tout les objet des praticines qui sont lié au visiteur et instance ainsi une liste
+    // String qui comporte les information principal du praticien à afficher et un tableau implémenter en paralléle qui contier l'id du praticien ( c'est ce qui sera
+    // envoyé dans l'objet rapport à notre service web au moment de l'insertion d'un nouveau rapport dans la base de donnée.
     public void RemplirSpinner(){
 
         SharedPreferences ps = this.getSharedPreferences("default",0);
@@ -176,11 +183,12 @@ public class SaisirCPActivity extends AppCompatActivity {
                 int lid[]= new int[response.length()];
                 try {
                     for( int i = 0 ; i < response.length() ; i++) {
+                        // recuperation de chaque objet jSon qet concaténation des information utilise dans un string qui sera ajouter à la liste et affich
                         JSONObject practicien = response.getJSONObject(i);
                         Log.i("PRACTICIEN NOMPRENOM",practicien.getString("praNom")+" "+practicien.getString("praPrenom"));
                         String resp = practicien.getString("praNom")+"-"+practicien.getString("praPrenom");
                        List[i]= resp;
-
+                        // implémentation du tabeau du numéro de matricul du praticien
                        lid[i]= Integer.parseInt(practicien.getString("praNum"));
 
                     }
@@ -211,7 +219,9 @@ public class SaisirCPActivity extends AppCompatActivity {
         requestQueue.add(jsonArraysRequest);
 
     }
-
+    //Cette méthode permet de recuperer la liste de string et le tableau d'id afin d'implementer la liste déroulante. A chaque élément de la liste sélectionner
+    // un parametre de classe récupére l'id du praticien a l'aide de l'indice de position de l'element selectionner. Ainsi une fois la validation faite
+    // cette variable sera  recupérer et envoyée dans l'objet rapport lui même envoyé un web service.
     public void RecupeLaListCp(String[] list, int[] lid) {
         listP = new String[list.length];
         ListId = lid;
@@ -226,7 +236,7 @@ public class SaisirCPActivity extends AppCompatActivity {
         listPraticien.setAdapter(adapter);
 
         listPraticien.setOnItemSelectedListener(new OnItemSelectedListener() {
-
+            // méthode pour gérer l'evenement du clique sur un autre objet de la liste déroulante
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view,
                                        int position, long id) {

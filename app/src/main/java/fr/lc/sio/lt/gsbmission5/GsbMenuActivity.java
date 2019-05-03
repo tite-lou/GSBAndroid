@@ -36,7 +36,7 @@ public class GsbMenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_gsb_menu);
 
        // SharedPreferences prefs.get
-
+        // recupération de certaines variables à propos du visiteur connecté
         SharedPreferences prefs = this.getSharedPreferences("default",0);
 
 
@@ -47,8 +47,9 @@ public class GsbMenuActivity extends AppCompatActivity {
         txtBienvenu.setText("Bonjour : "+prenom);
         //Log.d("jh",  res);
     }
+    // Methode qui permet au visiteur de se déconnecter et de retourner à la page de début, pour se connecter
     public void seDeconnecter(View vue) {
-      //  Session.fermer();
+      //au clique du bouton "se déconnecter"
         SharedPreferences sp = this.getSharedPreferences("default",0);
         SharedPreferences.Editor edit = sp.edit();
         edit.clear();
@@ -56,19 +57,20 @@ public class GsbMenuActivity extends AppCompatActivity {
         Intent retourAccueil = new Intent(this, MainActivity.class);
         startActivity(retourAccueil);
     }
+    // Méthode pour se rendre à l'activité de saisit d'un compte rendu
     public void saisirCP(View vue){
+        // au clique du bouton "saisir  un CP ""
         Intent saisie = new Intent(this, SaisirCPActivity.class);
         startActivity(saisie);
     }
+    //Méthode pour se rendre à l'activité permettant de voir les different compte-rendu saisit par le visiteur
     public void voirCP(View vue){
 
+        // au clique su bouton "Voir CP"
         Intent voir = new Intent(this, VoirCPActivity.class);
        startActivity(voir);
 
     }
-    public void choisirModifier(View vue){
-        Intent voir = new Intent(this, ChoisirModifierActivity.class);
-        startActivity(voir);
-    }
+
 
 }

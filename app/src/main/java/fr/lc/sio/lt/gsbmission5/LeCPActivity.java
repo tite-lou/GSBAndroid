@@ -43,19 +43,25 @@ public class LeCPActivity extends AppCompatActivity {
        int numRapport = prefs.getInt("numRapport",0);
        leText2.setText(" "+ String.valueOf(numRapport));
        this.AfficherLeCp(numRapport);
+       // permet d'afficher les information du visiteur qui a réalisé le compte rendu (ses information on été récupérer ultérieurement et passées en parametres de sesions)
        String leVisiteur = "Realiser par :"+prefs.getString("nom","")+" "+prefs.getString("prenom","");
        leText4.setText(leVisiteur);
     }
+    // retour à l'activité de selection d'un compte rendu
     public void retourChoix(View vue){
         Intent connexion = new Intent(this, VoirCPActivity.class);
         startActivity(connexion);
 
     }
+    //retour au menu
     public void retourMenu(View vue){
         Intent connexion = new Intent(this, GsbMenuActivity.class);
         startActivity(connexion);
 
     }
+    // méthode qui permet grâce à l'id du rapport/ compte rendu sélectionner dans l'activité précédente et sauvegarder en parametre de session,
+    // de faire appel à une méthode du service web qui nous retourner pour ce rapport sélectionner toute les information le concernant
+    // ainsi que les informations du praticien concerné par ce compte rendu
     public void AfficherLeCp (int numRapport){
 
 
@@ -74,18 +80,19 @@ public class LeCPActivity extends AppCompatActivity {
 
                         Log.d("LECPACTIVITY-TRY","on est renter");
 
-
+                        // recupération dans une variable string les information du praticien renvoyer par l'objet jSOn ( sous objet du réel objet rapport)
                         String lePracticien = " Praticien Concerné: "+response.getJSONObject("praticien").getString("praNom")+response.getJSONObject("praticien").getString("praPrenom")
                                 +newLigne+"Adresse :"+response.getJSONObject("praticien").getString("praAdresse")+" "+response.getJSONObject("praticien").getString("praCp")+ " "+
                                 response.getJSONObject("praticien").getString("praVille")+newLigne+response.getJSONObject("praticien").getString("praTypeCode");
 
 
-
+                        // récupération dans une variable les information concernant le rapport sélectonné
                         String infoCP="le Rapport numero : "+response.getString("rapNum")+newLigne+" fait le : "+response.getString("dateRapport")+newLigne+" Pour la visite du :"+newLigne+response.getString("dateVisite")+newLigne+"Consulter :"+response.getString("consulte")+
                                 newLigne+" Observation : "+response.getString("bilan");
                        // Log.d("TEST-POURLECP",resp);
                         Log.d("LEPRACTICIEN",lePracticien);
                         Log.d("LECPINFO",infoCP);
+                        // implementation des varaible dans des text view qui seront afficher sur l'activité et visible par l'utilisateur
                         leText2.setText(lePracticien);
                        // leText3.setText(leVisiteur);
                         leText3.setText(infoCP);
